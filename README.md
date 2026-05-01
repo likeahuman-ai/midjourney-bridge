@@ -1,11 +1,28 @@
-# midjourney-bridge
+<p align="center">
+  <img src="assets/hero.png" alt="midjourney-bridge — generated with Midjourney" width="100%">
+</p>
 
-Python client + CLI + MCP server that lets your AI tooling drive **your own** Midjourney subscription via the midjourney.com web API. No Discord. No third-party proxy. BYO account.
+<p align="center">
+  <img src="assets/logo-white.png" alt="Like a Human" height="32">
+</p>
 
-[![CI](https://github.com/likeahuman-ai/midjourney-bridge/actions/workflows/ci.yml/badge.svg)](https://github.com/likeahuman-ai/midjourney-bridge/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-orange)](#status)
-[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
+<h1 align="center">midjourney-bridge</h1>
+
+<p align="center">
+  Python client · CLI · MCP server<br>
+  Drive your own Midjourney subscription from code, the terminal, or Claude — no Discord, no proxy, BYO account.
+</p>
+
+<p align="center">
+  <a href="https://github.com/likeahuman-ai/midjourney-bridge/actions/workflows/ci.yml">
+    <img src="https://github.com/likeahuman-ai/midjourney-bridge/actions/workflows/ci.yml/badge.svg" alt="CI">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License">
+  </a>
+  <img src="https://img.shields.io/badge/status-pre--alpha-orange" alt="pre-alpha">
+  <img src="https://img.shields.io/badge/python-3.11%2B-blue" alt="Python 3.11+">
+</p>
 
 ---
 
@@ -13,11 +30,11 @@ Python client + CLI + MCP server that lets your AI tooling drive **your own** Mi
 
 midjourney-bridge replays the same HTTP calls the midjourney.com web UI makes. It ships in three forms that share one core library:
 
-| Surface | How to run | Best for |
+| Surface | How to use | Best for |
 |---|---|---|
 | **Python API** | `from midjourney_bridge import api` | Scripts, notebooks |
 | **CLI** (`mj`) | `uv run mj` after cloning | Manual use, debugging |
-| **MCP server** | `uv run python -m midjourney_bridge.mcp` | Claude Code, Claude Desktop |
+| **MCP server** | via `~/.mcp.json` | Claude Code, Claude Desktop |
 
 ### Capabilities
 
@@ -55,10 +72,11 @@ uv sync
 
 ```bash
 uv run mj cookie auto   # auto-extract session from your logged-in browser
-# or: uv run mj cookie set    # paste the cookie manually
+# or
+uv run mj cookie set    # paste the cookie manually
 
 uv run mj doctor        # verify the session works end-to-end
-uv run mj sync          # pull your job archive locally
+uv run mj sync          # pull your job archive locally (~seconds for 4k+ jobs)
 ```
 
 `mj cookie auto` reads the encrypted browser cookie store directly (Chrome first, then Brave, Arc, Edge, Firefox). On macOS it triggers a one-time Keychain access prompt.
@@ -81,7 +99,7 @@ mj upscale <job_id> 0                      # upscale top-left image
 mj variation <job_id> 2 --subtle
 mj reroll <job_id> --prompt "new prompt"
 mj video <job_id> 0                        # animate top-left image
-mj video-url <cdn_url>                    # animate a CDN image URL directly
+mj video-url <cdn_url>                     # animate a CDN URL directly
 ```
 
 ### Python
@@ -111,13 +129,13 @@ print(job.images[0].webp)
 **2. Authenticate**
 
 ```bash
-uv run mj cookie auto   # extracts session from your logged-in browser (Keychain prompt on macOS)
-uv run mj doctor        # verify end-to-end — should return your most recent job
+uv run mj cookie auto
+uv run mj doctor        # should return your most recent job
 ```
 
 **3. Register the MCP server**
 
-Add to `~/.mcp.json` (create it if it doesn't exist), substituting your actual clone path:
+Add to `~/.mcp.json`:
 
 ```json
 {
@@ -130,19 +148,17 @@ Add to `~/.mcp.json` (create it if it doesn't exist), substituting your actual c
 }
 ```
 
-The `.venv/bin/python` path ensures the right interpreter and deps regardless of your system Python. On macOS with a typical setup: `/Users/<you>/Projects/midjourney-bridge/.venv/bin/python`.
+Use the absolute path to the `.venv` in your clone. On macOS: `/Users/<you>/Projects/midjourney-bridge/.venv/bin/python`.
 
-**4. Restart Claude Code** — the `mj_*` tools will be available immediately.
-
-Alternatively, install the Claude skill from `skill/SKILL.md` into `~/.claude/skills/` for prompt-level access without the MCP server.
+**4. Restart Claude Code** — all `mj_*` tools are immediately available.
 
 ---
 
 ## How it works
 
-1. You authenticate once — `mj cookie auto` extracts the session from your browser
-2. All requests use [`curl_cffi`](https://github.com/lexiforest/curl_cffi) impersonating Chrome's TLS fingerprint (required — both the API and CDN enforce JA3/JA4 fingerprinting via Cloudflare)
-3. Reads hit `GET /api/imagine` and related endpoints; writes go through a single `POST /api/submit-jobs` with a `t` field dispatching the action type
+1. Authenticate once — `mj cookie auto` extracts the session from your browser
+2. All requests use [`curl_cffi`](https://github.com/lexiforest/curl_cffi) impersonating Chrome's TLS fingerprint — required by both the API and CDN (Cloudflare JA3/JA4)
+3. Reads hit `GET /api/imagine`; writes go through a single `POST /api/submit-jobs` dispatched via a `t` field
 4. Jobs are cached locally in a JSONL archive; search runs against it with `rapidfuzz`
 
 ```
@@ -177,7 +193,7 @@ See [docs/tos-and-legal.md](docs/tos-and-legal.md).
 ```bash
 uv sync --dev
 ./scripts/check.sh              # lint + format + types + tests
-./scripts/check.sh --integration  # also hit the real API (needs mj cookie auto)
+./scripts/check.sh --integration  # also hits the real API (needs mj cookie auto)
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -186,5 +202,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
-Built by [Like A Human](https://github.com/likeahuman-ai).
+MIT — see [LICENSE](LICENSE).<br>
+Built by [Like A Human](https://likeahuman.ai) — AI Marketing Automation Studio, Amsterdam.
