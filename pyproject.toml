@@ -5,7 +5,7 @@ description = "Open-source Python client + Claude skill + MCP server that lets y
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-authors = [{ name = "Like A Human", email = "academy@likeahuman.ai" }]
+authors = [{ name = "Like A Human", email = "jasper@likeahuman.ai" }]
 keywords = ["midjourney", "mcp", "claude", "ai", "image-generation"]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
