@@ -91,7 +91,8 @@ def test_extract_falls_back_to_next_browser() -> None:
 def test_extract_with_explicit_browser() -> None:
     edge_jar = _jar_with(REQUIRED_AUTH)
     with patch(
-        "midjourney_bridge.extract._try_browser", side_effect=lambda n: edge_jar if n == "edge" else None
+        "midjourney_bridge.extract._try_browser",
+        side_effect=lambda n: edge_jar if n == "edge" else None,
     ):
         result = extract(browser="edge")
     assert result.browser == "edge"
@@ -123,7 +124,8 @@ def test_extract_filters_non_mj_domains_out_of_jar() -> None:
     jar.set_cookie(_make_cookie(REQUIRED_AUTH, domain=".midjourney.com"))
     jar.set_cookie(_make_cookie("evil_cookie", domain=".attacker.com"))
     with patch(
-        "midjourney_bridge.extract._try_browser", side_effect=lambda n: jar if n == "chrome" else None
+        "midjourney_bridge.extract._try_browser",
+        side_effect=lambda n: jar if n == "chrome" else None,
     ):
         result = extract()
     assert "evil_cookie" not in result.cookie

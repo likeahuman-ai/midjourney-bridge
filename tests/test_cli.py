@@ -54,7 +54,9 @@ def test_cookie_set_writes_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch)
     target = tmp_path / "config" / ".env"
     monkeypatch.setattr("midjourney_bridge.cli.config_path", lambda: target.parent)
     monkeypatch.setattr("midjourney_bridge.cli.env_path", lambda: target)
-    monkeypatch.setattr("midjourney_bridge.cli.getpass.getpass", lambda _prompt: "test-cookie-value")
+    monkeypatch.setattr(
+        "midjourney_bridge.cli.getpass.getpass", lambda _prompt: "test-cookie-value"
+    )
 
     result = runner.invoke(app, ["cookie", "set"], input="\n")  # blank UA
     assert result.exit_code == 0
@@ -83,7 +85,9 @@ def test_cookie_auto_dry_run(monkeypatch: pytest.MonkeyPatch) -> None:
 
     # Should not call _save_env in dry-run mode
     save_calls: list[tuple] = []
-    monkeypatch.setattr("midjourney_bridge.cli._save_env", lambda *a, **kw: save_calls.append((a, kw)))
+    monkeypatch.setattr(
+        "midjourney_bridge.cli._save_env", lambda *a, **kw: save_calls.append((a, kw))
+    )
 
     result = runner.invoke(app, ["cookie", "auto", "--dry-run"])
     assert result.exit_code == 0
