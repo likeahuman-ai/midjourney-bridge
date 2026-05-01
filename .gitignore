@@ -1,0 +1,48 @@
+# planning / workflow tools
+PLANNING.md
+.paul/
+notes/
+
+# secrets — NEVER commit
+.env
+.env.*
+*.cookie
+notes/spike/.env
+notes/spike/captures/*.json
+notes/spike/captures/*.html
+notes/spike/captures/*.webp
+notes/spike/captures/*.png
+notes/spike/captures/*.jpeg
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+htmlcov/
+*.cover
+.python-version
+
+# venvs
+.venv/
+venv/
+env/
+
+# editors
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# local mj-bridge state (would normally be in user_config_dir but just in case)
+.mj-bridge/
+mj-bridge.db
