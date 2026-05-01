@@ -16,8 +16,8 @@ midjourney-bridge replays the same HTTP calls the midjourney.com web UI makes. I
 | Surface | How to run | Best for |
 |---|---|---|
 | **Python API** | `from midjourney_bridge import api` | Scripts, notebooks |
-| **CLI** (`mj`) | bundled with pip install | Manual use, debugging |
-| **MCP server** | `python -m midjourney_bridge.mcp` | Claude Code, Claude Desktop |
+| **CLI** (`mj`) | `uv run mj` after cloning | Manual use, debugging |
+| **MCP server** | `uv run python -m midjourney_bridge.mcp` | Claude Code, Claude Desktop |
 
 ### Capabilities
 
@@ -43,7 +43,7 @@ All MJ flags travel inline in the prompt string: `--ar 16:9 --v 8.1 --sref 1234 
 
 ```bash
 git clone https://github.com/likeahuman-ai/midjourney-bridge
-cd mj-bridge
+cd midjourney-bridge
 uv sync
 ```
 
