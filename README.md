@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/logo-white.png" alt="Like a Human" height="32">
+  <img src="assets/logo.png" alt="Like a Human" height="32">
 </p>
 
 <h1 align="center">midjourney-bridge</h1>
